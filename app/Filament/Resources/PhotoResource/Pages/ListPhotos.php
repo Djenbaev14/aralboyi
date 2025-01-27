@@ -16,4 +16,5 @@ class ListPhotos extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+    
 }

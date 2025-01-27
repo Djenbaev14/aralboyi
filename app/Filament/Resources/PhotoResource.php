@@ -7,14 +7,17 @@ use App\Filament\Resources\PhotoResource\RelationManagers;
 use App\Models\Photo;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Log;
 
 class PhotoResource extends Resource
 {
@@ -25,15 +28,22 @@ class PhotoResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Section::make('')
+        ->schema([
+            Section::make('photos')
                 ->schema([
-                    FileUpload::make('photo')
-                        ->image()
-                        ->label('Фото')
-                        ->disk('public') 
-                        ->directory('photos') 
-                        ->required(),
+                    Repeater::make('photos')
+                    ->schema([
+                        FileUpload::make('photo')
+                            ->label('Фото')
+                            ->disk('public') 
+                            ->directory('photos') 
+                            ->image()
+                            ->required(),
+                    ])
+                    ->label('Photos') // Umumiy label
+                    ->collapsible() // Qisqartiriladigan (collapse) holat
+                    ->minItems(1) // Eng kam nechta element
+                    ->maxItems(10), // Eng ko‘p nechta element   
                 ])
             ]);
     }
@@ -42,10 +52,25 @@ class PhotoResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('photo')
-                    ->label('Фото')
-                    ->square()
+                // ImageColumn::make('photo')
+                //     ->label('Фото')
+                //     ->square()
+                
+            TextColumn::make('photos')
+            ->label('Photos')
+            ->formatStateUsing(function ($state) {
+                $photos = json_decode($state, true);
+                if (is_array($photos)) {
+                    return "<div style='display: flex; gap: 10px;'>".
+                    
+                    collect($photos)->map(fn ($photo) => 
+                        "<img src='" . asset('storage/' . $photo['photo']) . "' style='width: 50px; height: 50px; margin: 5px; border-radius: 8px;'>"
+                    )->implode('')."</div>";
+                }
+            })
+            ->html(), // HTML kodni qo‘llab-quvvatlash uchun
             ])
+            ->defaultSort('id', 'desc') // Default tartibni sozlash
             ->filters([
                 //
             ])
@@ -58,6 +83,7 @@ class PhotoResource extends Resource
                 ]),
             ]);
     }
+    
     public static function getNavigationLabel(): string
     {
         return 'Фото галерия'; // Rus tilidagi nom

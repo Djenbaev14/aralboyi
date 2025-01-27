@@ -47,6 +47,7 @@ class VideoResource extends Resource
             ->columns([
                 ViewColumn::make('video_src')->label('Video link')->view('components.table.iframe-column')->extraAttributes(['style' => 'width: 300px; height: 200px;']) ,
             ])
+            ->defaultSort('id', 'desc') // Default tartibni sozlash
             ->filters([
                 //
             ])

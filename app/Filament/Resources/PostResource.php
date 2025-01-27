@@ -101,6 +101,7 @@ class PostResource extends Resource
                     ->label('Фото')
                     ->square()
             ])
+            ->defaultSort('id', 'desc') // Default tartibni sozlash
             ->filters([
                 //
             ])
