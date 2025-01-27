@@ -37,7 +37,6 @@ class PhotoResource extends Resource
                             ->label('Фото')
                             ->disk('public') 
                             ->directory('photos') 
-                            ->image()
                             ->required(),
                     ])
                     ->label('Photos') // Umumiy label
@@ -58,17 +57,17 @@ class PhotoResource extends Resource
                 
             TextColumn::make('photos')
             ->label('Photos')
-            ->formatStateUsing(function ($state) {
-                $photos = json_decode($state, true);
-                if (is_array($photos)) {
-                    return "<div style='display: flex; gap: 10px;'>".
+            // ->formatStateUsing(function ($state) {
+            //     // $photos = json_decode($state, true);
+            //     if (is_array($state)) {
+            //         return "<div style='display: flex; gap: 10px;'>".
                     
-                    collect($photos)->map(fn ($photo) => 
-                        "<img src='" . asset('storage/' . $photo['photo']) . "' style='width: 50px; height: 50px; margin: 5px; border-radius: 8px;'>"
-                    )->implode('')."</div>";
-                }
-            })
-            ->html(), // HTML kodni qo‘llab-quvvatlash uchun
+            //         collect($photos)->map(fn ($photo) => 
+            //             "<img src='" . asset('storage/' . $photo['photo']) . "' style='width: 50px; height: 50px; margin: 5px; border-radius: 8px;'>"
+            //         )->implode('')."</div>";
+            //     }
+            // })
+            // ->html(), // HTML kodni qo‘llab-quvvatlash uchun
             ])
             ->defaultSort('id', 'desc') // Default tartibni sozlash
             ->filters([

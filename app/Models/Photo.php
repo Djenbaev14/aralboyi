@@ -11,8 +11,8 @@ class Photo extends Model
 
     protected $guarded=['id'];
 
-    // protected $casts = [
-    //     'photos' => 'array',
-    // ];
+    protected $casts = [
+        'photos' => 'array',
+    ];
 
 }
