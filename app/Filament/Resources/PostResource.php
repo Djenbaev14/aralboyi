@@ -96,10 +96,15 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name_uz')->label('Название')->searchable(),
+                TextColumn::make('name_uz')->label('Название')->limit(20)->searchable(),
                 ImageColumn::make('photo')
                     ->label('Фото')
-                    ->square()
+                    ->square(),
+                TextColumn::make('created_at')
+                ->label('Creation Date')
+                ->formatStateUsing(function ($state) {
+                    return \Carbon\Carbon::parse($state)->format('d/m/Y'); // Sana formatini o‘zgartirish
+                })
             ])
             ->defaultSort('id', 'desc') // Default tartibni sozlash
             ->filters([

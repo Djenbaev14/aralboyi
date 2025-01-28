@@ -54,11 +54,16 @@ class PhotoResource extends Resource
                 // ImageColumn::make('photo')
                 //     ->label('Фото')
                 //     ->square()
-                
-            TextColumn::make('photos')
+            ImageColumn::make('photos')
             ->label('Photos')
+            ->size(50) // Rasmlar o‘lchami (px)
+            ->extraAttributes(['style' => 'border-radius: 8px;']) // Stil qo'shish
+            ->getStateUsing(fn ($record) => $record->photos[0] ?? null), 
+            // TextColumn::make('photos')
+            // ->label('Photos')
             // ->formatStateUsing(function ($state) {
-            //     // $photos = json_decode($state, true);
+            //     $photos = json_decode($state,true);
+            //     return "<span>".gettype($photos)."</span>";
             //     if (is_array($state)) {
             //         return "<div style='display: flex; gap: 10px;'>".
                     
@@ -67,7 +72,12 @@ class PhotoResource extends Resource
             //         )->implode('')."</div>";
             //     }
             // })
-            // ->html(), // HTML kodni qo‘llab-quvvatlash uchun
+            // ->html(),
+            TextColumn::make('created_at')
+            ->label('Creation Date')
+            ->formatStateUsing(function ($state) {
+                return \Carbon\Carbon::parse($state)->format('d/m/Y'); // Sana formatini o‘zgartirish
+            })
             ])
             ->defaultSort('id', 'desc') // Default tartibni sozlash
             ->filters([
