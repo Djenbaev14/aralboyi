@@ -9,6 +9,7 @@ use App\Models\Photo;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\TvShow;
 use App\Models\Video;
 use Request;
 
@@ -16,7 +17,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        return PostResource::collection(Post::whereNull('deleted_at')->paginate(10));
+        return PostResource::collection(Post::whereNull('deleted_at')->orderBy('id','desc')->paginate(10));
     }
 
    
@@ -33,11 +34,15 @@ class PostController extends Controller
         return response()->json($about);
     }
     public function photos(){
-        $photos=Photo::get();
+        $photos=Photo::orderBy('id','desc')->get();
         return response()->json($photos);
     }
     public function videos(){
-        $videos=Video::get();
+        $videos=Video::orderBy('id','desc')->get();
+        return response()->json($videos);
+    }
+    public function tvshows(){
+        $videos=TvShow::orderBy('id','desc')->get();
         return response()->json($videos);
     }
 

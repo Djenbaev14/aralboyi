@@ -27,3 +27,4 @@ Route::apiResource('posts', PostController::class);
 Route::get('/about-us', [PostController::class, 'about']);
 Route::get('/videos', [PostController::class, 'videos']);
 Route::get('/photos', [PostController::class, 'photos']);
+Route::get('/tvshows', [PostController::class, 'tvshows']);
